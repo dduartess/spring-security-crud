@@ -52,6 +52,6 @@ public class UserController {
         }
 
         repository.deleteById(id);
-        return ResponseEntity.noContent().build(); // 204
+        return ResponseEntity.noContent().build();
     }
 }
