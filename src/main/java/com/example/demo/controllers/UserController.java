@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.entities.User;
-import com.example.demo.views.UserRepository;
+import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
