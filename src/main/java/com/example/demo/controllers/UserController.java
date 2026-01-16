@@ -38,6 +38,7 @@ public class UserController {
                 .map(user -> {
                     user.setName(updatedUser.getName());
                     user.setPassword(updatedUser.getPassword());
+                    user.setEmail(updatedUser.getEmail());
                     User savedUser = repository.save(user);
                     return ResponseEntity.ok(savedUser);
                 })
