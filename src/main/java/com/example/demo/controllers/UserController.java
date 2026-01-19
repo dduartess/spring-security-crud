@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.entities.User;
+import com.example.demo.models.entities.users.User;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         return repository.findById(id)
                 .map(user -> {
-                    user.setName(updatedUser.getName());
+                    user.setLogin(updatedUser.getLogin());
                     user.setPassword(updatedUser.getPassword());
                     user.setEmail(updatedUser.getEmail());
                     User savedUser = repository.save(user);
