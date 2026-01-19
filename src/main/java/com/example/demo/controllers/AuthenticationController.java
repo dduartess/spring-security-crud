@@ -1,7 +1,9 @@
 package com.example.demo.controllers;
 
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.infra.security.TokenService;
 import com.example.demo.models.entities.users.AuthenticationDTO;
+import com.example.demo.models.entities.users.LoginResponseDTO;
 import com.example.demo.models.entities.users.RegisterDTO;
 import com.example.demo.models.entities.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,15 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
