@@ -1,8 +1,8 @@
-# 🛡️ Spring Security CRUD API
+# 🛡️ Spring Security CRUD API com JWT
 
-API REST desenvolvida com **Spring Boot**, implementando operações **CRUD** para **Users** e **Products**, utilizando **Spring Data JPA**, **MySQL em Docker** e boas práticas de desenvolvimento backend.
+API REST desenvolvida com **Spring Boot**, implementando **autenticação Stateless via JWT** e **CRUD de Products**, utilizando **Spring Security**, **Spring Data JPA**, **MySQL em Docker** e boas práticas de desenvolvimento backend.
 
-O projeto tem foco em **aprendizado**, **organização de código**, **versionamento correto** e preparação para autenticação com **Spring Security**.
+O projeto tem foco em **aprendizado sólido**, **organização de código**, **arquitetura limpa**, **segurança** e preparação para aplicações reais em produção.
 
 ---
 
@@ -15,15 +15,32 @@ O projeto tem foco em **aprendizado**, **organização de código**, **versionam
 | Spring Web | ✔️ |
 | Spring Security | ✔️ |
 | Spring Data JPA | ✔️ |
+| JWT (Stateless) | ✔️ |
 | MySQL | Docker Container |
 | Docker & Docker Compose | ✔️ |
 | Maven | ✔️ |
 
 ---
 
+## 🔐 Segurança & Autenticação
+
+- Autenticação **Stateless** com **JWT**
+- Registro de usuários (`/auth/register`)
+- Login com geração de token (`/auth/login`)
+- Token enviado via header `Authorization: Bearer <token>`
+- Filtro de autenticação com `OncePerRequestFilter`
+- Sessão desabilitada (`SessionCreationPolicy.STATELESS`)
+- Senhas criptografadas com **BCrypt**
+- Usuários não possuem CRUD exposto (boa prática de segurança)
+
+---
+
 ## 📦 Funcionalidades
 
-✔️ CRUD completo de **Users**  
+✔️ Registro de usuários  
+✔️ Login com geração de **JWT**  
+✔️ Autenticação Stateless  
+✔️ Proteção de rotas com Spring Security  
 ✔️ CRUD completo de **Products**  
 ✔️ API REST seguindo padrão HTTP  
 ✔️ Persistência com MySQL  
@@ -35,57 +52,52 @@ O projeto tem foco em **aprendizado**, **organização de código**, **versionam
 ## 📁 Estrutura do Projeto
 
 ```
-demo/
-├── Docker/
-│   └── docker-compose.yml
-├── src/
-│   └── main/
-│       ├── java/com/example/demo
-│       │   ├── controllers/
-│       │   │   ├── UserController.java
-│       │   │   └── ProductController.java
-│       │   ├── models.entities/
-│       │   │   ├── User.java
-│       │   │   └── Product.java
-│       │   ├── repositories/
-│       │   │   ├── UserRepository.java
-│       │   │   └── ProductRepository.java
-│       │   └── DemoApplication.java
-│       └── resources/
-│           └── application.properties
-├── pom.xml
-└── README.md
+src/
+└── main/
+    └── java/
+        └── com.example.demo
+            ├── controllers/
+            │   ├── AuthenticationController.java
+            │   └── ProductController.java
+            │
+            ├── infra/security/
+            │   ├── SecurityConfigurations.java
+            │   ├── SecurityFilter.java
+            │   └── TokenService.java
+            │
+            ├── models/entities/
+            │   ├── products/
+            │   │   └── Product.java
+            │   │
+            │   └── users/
+            │       ├── AuthenticationDTO.java
+            │       ├── LoginResponseDTO.java
+            │       ├── RegisterDTO.java
+            │       ├── User.java
+            │       └── UserRole.java
+            │
+            ├── repositories/
+            │   ├── ProductRepository.java
+            │   └── UserRepository.java
+            │
+            ├── services/
+            │   └── AuthorizationService.java
+            │
+            └── DemoApplication.java
 ```
 
 ---
 
 ## 🐳 Rodando com Docker (Recomendado)
 
-> **Pré-requisitos:** Docker e Docker Compose instalados
-
 ```bash
 cd Docker
-docker-compose up
+docker compose up
 ```
-
-O Docker irá:
-- subir o container do **MySQL**
-- disponibilizar o banco para a aplicação
-- manter o ambiente isolado e reproduzível
 
 ---
 
-## ▶️ Rodando localmente (sem Docker)
-
-1. Configure o banco no `application.properties`:
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/demo
-spring.datasource.username=root
-spring.datasource.password=senha
-```
-
-2. Execute a aplicação:
+## ▶️ Rodando localmente
 
 ```bash
 ./mvnw spring-boot:run
@@ -93,51 +105,13 @@ spring.datasource.password=senha
 
 ---
 
-## 📌 Endpoints Disponíveis
+## 🔑 Autenticação
 
-### Users
+### Registro
+POST `/auth/register`
 
-| Método | Endpoint |
-|------|---------|
-| GET | `/users` |
-| GET | `/users/{id}` |
-| POST | `/users` |
-| PUT | `/users/{id}` |
-| DELETE | `/users/{id}` |
-
----
-
-### Products
-
-| Método | Endpoint |
-|------|---------|
-| GET | `/products` |
-| GET | `/products/{id}` |
-| POST | `/products` |
-| PUT | `/products/{id}` |
-| DELETE | `/products/{id}` |
-
----
-
-## 📘 Boas Práticas Aplicadas
-
-✔️ Padrão REST  
-✔️ Uso correto de `ResponseEntity`  
-✔️ Tratamento de `Optional`  
-✔️ Organização de commits  
-✔️ Separação de responsabilidades  
-✔️ Ambiente Dockerizado
-
----
-
-## 🔐 Próximos Passos
-
-- Autenticação JWT Stateless
-- Criptografia de senha
-- DTOs
-- Validação de dados
-- Swagger / OpenAPI
-- Testes automatizados
+### Login
+POST `/auth/login`
 
 ---
 
